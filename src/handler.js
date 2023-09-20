@@ -51,7 +51,7 @@ const getAllNotesHandler = () => ({
 const getNoteByIdHandler = (request, h) => {
   // Path Parameter
   const { id } = request.params;
-  // Look for corresponding id value 
+  // Find corresponding to id value 
   const note = notes.filter((n) => n.id === id)[0];
     // Success
     if(note !== undefined) {
@@ -71,5 +71,47 @@ const getNoteByIdHandler = (request, h) => {
     return response;
 };
 
+// Edit Selected Note
+const editNoteByIdHandler = (request, h) => {
+  // Path parameter
+  const { id } = request.params;
+  // Payload request 
+  const { title, tags, body } = request.payload;
+  // Update current date
+  const updatedAt = new Date().toISOString();
+  // Find index corresponding to id value
+  const index = notes.findIndex((n) => n.id === id);
+    // Success
+    if(index !== -1) {
+      notes[index] = {
+        ...notes[index],
+        title,
+        tags,
+        body,
+        updatedAt,
+      };
+      // Response tool
+      const response = h.response({
+        status: "success",
+        message: "note has been changed successfuly",
+      });
+      response.code(200);
+      return response;
+    }
+    // Failed
+    const response = h.response({
+      status: "failed",
+      message: "Note was unsuccessfully changed, id was not found",
+    })
+    response.code(404);
+    return response;
+}
+
+
 // Export Module
-module.exports = {addNoteHandler, getAllNotesHandler, getNoteByIdHandler};
+module.exports = {
+  addNoteHandler, 
+  getAllNotesHandler, 
+  getNoteByIdHandler, 
+  editNoteByIdHandler
+};
