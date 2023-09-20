@@ -39,5 +39,37 @@ const addNoteHandler = (request, h) => {
     return response;
 };
 
+// Display All Note
+const getAllNotesHandler = () => ({
+  status: "success",
+  data: {
+    notes,
+  },
+});
+
+// Display Selected Note
+const getNoteByIdHandler = (request, h) => {
+  // Path Parameter
+  const { id } = request.params;
+  // Look for corresponding id value 
+  const note = notes.filter((n) => n.id === id)[0];
+    // Success
+    if(note !== undefined) {
+      return {
+        status: "success",
+        data: {
+          note,
+        },
+      };
+    }
+    // Failed
+    const response = h.response ({
+      status: "failed",
+      message: "note was not found",
+    });
+    response.code(404);
+    return response;
+};
+
 // Export Module
-module.exports = {addNoteHandler};
+module.exports = {addNoteHandler, getAllNotesHandler, getNoteByIdHandler};

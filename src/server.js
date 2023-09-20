@@ -18,6 +18,7 @@ const init = async () => {
   });
   // Configure router
   server.route(routes);
+  
   await server.start();
   console.log(`Server running on ${server.info.uri}`);
 };
